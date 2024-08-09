@@ -10,6 +10,7 @@ import hashlib
 from tenacity import retry, stop_after_attempt, wait_exponential
 from html import escape
 import datetime
+from requests.models import Response
 
 print("\n > Bienvenido a SiteMaster Audit <\n   > Escaneo todo en uno con generación de informe\n\n")
 
@@ -22,12 +23,13 @@ def get_with_retries(url):
             print(f"Rate limit exceeded when accessing {url}")
             raise requests.exceptions.RequestException("Rate limit exceeded")
         return response
-    except requests.exceptions.ConnectionError as e:
-        print(f"Connection error when accessing {url}: {e}")
-        return None  # retorna si es error de conexion
     except requests.exceptions.RequestException as e:
         print(f"Error al realizar la solicitud GET a {url}: {e}")
-        raise
+        
+        # Crea una respuesta falsa para evitar el error
+        fake_response = Response()
+        fake_response.status_code = 0  # Puedes usar un código de estado especial para denotar fallos
+        return fake_response
 
 @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
 def head_with_retries(url):
@@ -764,7 +766,7 @@ def analyze_page(url, internal_links=None):
     
     # Excluir elementos dentro de #footer-page
     footer_page = soup.find(id='footer-page')
-    if (footer_page):
+    if footer_page:
         footer_page.decompose()
 
     problems = {
@@ -895,9 +897,10 @@ def analyze_page(url, internal_links=None):
     
     # Verificar enlaces rotos (404)
     for link in soup.find_all('a', href=True):
-        link_url = link['href']
+        link_url = urljoin(url, link['href'])  # Asegúrate de que la URL sea absoluta
         try:
-            if link_url.startswith(url) and head_with_retries(link_url).status_code == 404:
+            head_response = head_with_retries(link_url)
+            if head_response.status_code == 404:
                 problems["Enlaces rotos (404)"].append(link_url)
         except requests.exceptions.RequestException:
             continue
@@ -1002,7 +1005,6 @@ def analyze_page(url, internal_links=None):
         "robots_url": robots_url,
         "aria_roles_info": aria_roles_info
     }
-
 
 
 def main():
