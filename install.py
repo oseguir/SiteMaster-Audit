@@ -9,3 +9,5 @@ pip install colour
 pip install tenacity
 
 # ejecución del script SiteMaster
+apt install python3
+python3 SiteMasterAudit.py
