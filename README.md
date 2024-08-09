@@ -10,7 +10,10 @@ Creada en 08/08/24
 Horas de desarrollo: 16hs
 
 
-<b>Librerias necesarias</b>
+<b>Auto install Linux:</b> <code>bash install.sh</code>
+
+
+<b>Librerias necesarias (instalación manual)</b>
 
 
 <code>pip install requests beautifulsoup4 cssutils colour tenacity
