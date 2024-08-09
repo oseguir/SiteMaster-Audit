@@ -10,9 +10,10 @@ Creada en 08/08/24
 Horas de desarrollo: 16hs
 
 
-Librerias necesarias
-<code>
-pip install requests beautifulsoup4 cssutils colour tenacity
+<b>Librerias necesarias</b>
+
+
+<code>pip install requests beautifulsoup4 cssutils colour tenacity
 pip install requests
 pip install beautifulsoup4
 pip install cssutils
