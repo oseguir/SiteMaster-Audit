@@ -19,3 +19,7 @@ pip install cssutils
 pip install colour
 pip install tenacity
 </code>
+
+
+<b>Updates:</b>
+- network errors fixed (09/08/24)
