@@ -7,3 +7,5 @@ pip install beautifulsoup4
 pip install cssutils
 pip install colour
 pip install tenacity
+
+# ejecución del script SiteMaster
