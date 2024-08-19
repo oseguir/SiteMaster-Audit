@@ -41,11 +41,16 @@ def head_with_retries(url):
         return response
     except requests.exceptions.ConnectionError as e:
         print(f"Connection error when accessing {url}: {e}")
-        return None  # retorna si es error de conexion
+        # Crea una respuesta falsa para evitar el error
+        fake_response = Response()
+        fake_response.status_code = 0  # Puedes usar un código de estado especial para denotar fallos
+        return fake_response
     except requests.exceptions.RequestException as e:
         print(f"Error al realizar la solicitud HEAD a {url}: {e}")
-        raise
-
+        # Crea una respuesta falsa para evitar el error
+        fake_response = Response()
+        fake_response.status_code = 0
+        return fake_response
 
 # ccsutils errores criticos
 cssutils.log.setLevel('CRITICAL')
